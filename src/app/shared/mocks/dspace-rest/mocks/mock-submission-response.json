@@ -38,10 +38,7 @@
               "closed": null
             }
           ],
-          "languageCodes": [
-            "en",
-            "nl"
-          ]
+          "languageCodes": ["en", "nl"]
         }
       ]
     },
