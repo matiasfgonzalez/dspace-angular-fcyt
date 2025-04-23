@@ -47,7 +47,9 @@ const getEnvironment = (): Environment => {
         environment = 'development';
         break;
       default:
-        console.warn(`Unknown NODE_ENV ${ENV('NODE_ENV')}. Defaulting to production.`);
+        console.warn(
+          `Unknown NODE_ENV ${ENV('NODE_ENV')}. Defaulting to production.`
+        );
     }
   }
 
@@ -58,7 +60,6 @@ const getEnvironment = (): Environment => {
  * Get the path of the default config file.
  */
 const getDefaultConfigPath = () => {
-
   // default to config/config.yml
   let defaultConfigPath = join(CONFIG_PATH, 'config.yml');
 
@@ -75,7 +76,6 @@ const getDefaultConfigPath = () => {
  * @param env   the environment to get the config file for
  */
 const getEnvConfigFilePath = (env: Environment) => {
-
   // determine app config filename variations
   let envVariations;
   switch (env) {
@@ -111,7 +111,7 @@ const overrideWithConfig = (config: Config, pathToConfig: string) => {
   try {
     console.log(`Overriding app config with ${pathToConfig}`);
     const externalConfig = readFileSync(pathToConfig, 'utf8');
-    mergeConfig(config, load(externalConfig));
+    mergeConfig(config, load(externalConfig) as AppConfig);
   } catch (err) {
     console.error(err);
   }
@@ -120,7 +120,9 @@ const overrideWithConfig = (config: Config, pathToConfig: string) => {
 const overrideWithEnvironment = (config: Config, key: string = '') => {
   // eslint-disable-next-line guard-for-in
   for (const property in config) {
-    const variable = `${key}${isNotEmpty(key) ? '_' : ''}${property.toUpperCase()}`;
+    const variable = `${key}${
+      isNotEmpty(key) ? '_' : ''
+    }${property.toUpperCase()}`;
     const innerConfig = config[property];
     if (isNotEmpty(innerConfig)) {
       if (typeof innerConfig === 'object') {
@@ -128,7 +130,11 @@ const overrideWithEnvironment = (config: Config, key: string = '') => {
       } else {
         const value = ENV(variable, true);
         if (isNotEmpty(value)) {
-          console.log(`Applying environment variable ${DSPACE(variable)} with value ${value}`);
+          console.log(
+            `Applying environment variable ${DSPACE(
+              variable
+            )} with value ${value}`
+          );
           switch (typeof innerConfig) {
             case 'number':
               config[property] = getNumberFromString(value);
@@ -140,7 +146,11 @@ const overrideWithEnvironment = (config: Config, key: string = '') => {
               config[property] = value;
               break;
             default:
-              console.warn(`Unsupported environment variable type ${typeof innerConfig} ${DSPACE(variable)}`);
+              console.warn(
+                `Unsupported environment variable type ${typeof innerConfig} ${DSPACE(
+                  variable
+                )}`
+              );
           }
         }
       }
@@ -148,14 +158,16 @@ const overrideWithEnvironment = (config: Config, key: string = '') => {
   }
 };
 
-
-
 const buildBaseUrl = (config: ServerConfig): void => {
   config.baseUrl = [
     config.ssl ? 'https://' : 'http://',
     config.host,
-    config.port && config.port !== 80 && config.port !== 443 ? `:${config.port}` : '',
-    config.nameSpace && config.nameSpace.startsWith('/') ? config.nameSpace : `/${config.nameSpace}`
+    config.port && config.port !== 80 && config.port !== 443
+      ? `:${config.port}`
+      : '',
+    config.nameSpace && config.nameSpace.startsWith('/')
+      ? config.nameSpace
+      : `/${config.nameSpace}`,
   ].join('');
 };
 
@@ -209,7 +221,9 @@ export const buildAppConfig = (destConfigPath?: string): AppConfig => {
     if (existsSync(externalConfigPath)) {
       overrideWithConfig(appConfig, externalConfigPath);
     } else {
-      console.warn(`Unable to find external config file at ${externalConfigPath}`);
+      console.warn(
+        `Unable to find external config file at ${externalConfigPath}`
+      );
     }
   }
 
@@ -217,16 +231,32 @@ export const buildAppConfig = (destConfigPath?: string): AppConfig => {
   overrideWithEnvironment(appConfig);
 
   // apply existing non convention UI environment variables
-  appConfig.ui.host = isNotEmpty(ENV('HOST', true)) ? ENV('HOST', true) : appConfig.ui.host;
-  appConfig.ui.port = isNotEmpty(ENV('PORT', true)) ? getNumberFromString(ENV('PORT', true)) : appConfig.ui.port;
-  appConfig.ui.nameSpace = isNotEmpty(ENV('NAMESPACE', true)) ? ENV('NAMESPACE', true) : appConfig.ui.nameSpace;
-  appConfig.ui.ssl = isNotEmpty(ENV('SSL', true)) ? getBooleanFromString(ENV('SSL', true)) : appConfig.ui.ssl;
+  appConfig.ui.host = isNotEmpty(ENV('HOST', true))
+    ? ENV('HOST', true)
+    : appConfig.ui.host;
+  appConfig.ui.port = isNotEmpty(ENV('PORT', true))
+    ? getNumberFromString(ENV('PORT', true))
+    : appConfig.ui.port;
+  appConfig.ui.nameSpace = isNotEmpty(ENV('NAMESPACE', true))
+    ? ENV('NAMESPACE', true)
+    : appConfig.ui.nameSpace;
+  appConfig.ui.ssl = isNotEmpty(ENV('SSL', true))
+    ? getBooleanFromString(ENV('SSL', true))
+    : appConfig.ui.ssl;
 
   // apply existing non convention REST environment variables
-  appConfig.rest.host = isNotEmpty(ENV('REST_HOST', true)) ? ENV('REST_HOST', true) : appConfig.rest.host;
-  appConfig.rest.port = isNotEmpty(ENV('REST_PORT', true)) ? getNumberFromString(ENV('REST_PORT', true)) : appConfig.rest.port;
-  appConfig.rest.nameSpace = isNotEmpty(ENV('REST_NAMESPACE', true)) ? ENV('REST_NAMESPACE', true) : appConfig.rest.nameSpace;
-  appConfig.rest.ssl = isNotEmpty(ENV('REST_SSL', true)) ? getBooleanFromString(ENV('REST_SSL', true)) : appConfig.rest.ssl;
+  appConfig.rest.host = isNotEmpty(ENV('REST_HOST', true))
+    ? ENV('REST_HOST', true)
+    : appConfig.rest.host;
+  appConfig.rest.port = isNotEmpty(ENV('REST_PORT', true))
+    ? getNumberFromString(ENV('REST_PORT', true))
+    : appConfig.rest.port;
+  appConfig.rest.nameSpace = isNotEmpty(ENV('REST_NAMESPACE', true))
+    ? ENV('REST_NAMESPACE', true)
+    : appConfig.rest.nameSpace;
+  appConfig.rest.ssl = isNotEmpty(ENV('REST_SSL', true))
+    ? getBooleanFromString(ENV('REST_SSL', true))
+    : appConfig.rest.ssl;
 
   // apply build defined production
   appConfig.production = env === 'production';
@@ -238,7 +268,11 @@ export const buildAppConfig = (destConfigPath?: string): AppConfig => {
   if (isNotEmpty(destConfigPath)) {
     writeFileSync(destConfigPath, JSON.stringify(appConfig, null, 2));
 
-    console.log(`Angular ${bold('config.json')} file generated correctly at ${bold(destConfigPath)} \n`);
+    console.log(
+      `Angular ${bold('config.json')} file generated correctly at ${bold(
+        destConfigPath
+      )} \n`
+    );
   }
 
   return appConfig;
