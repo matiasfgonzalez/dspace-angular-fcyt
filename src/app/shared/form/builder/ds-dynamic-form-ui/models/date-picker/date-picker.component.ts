@@ -5,7 +5,7 @@ import { hasValue } from '../../../../../empty.util';
 import {
   DynamicFormControlComponent,
   DynamicFormLayoutService,
-  DynamicFormValidationService
+  DynamicFormValidationService,
 } from '@ng-dynamic-forms/core';
 
 export const DS_DATE_PICKER_SEPARATOR = '-';
@@ -15,8 +15,10 @@ export const DS_DATE_PICKER_SEPARATOR = '-';
   styleUrls: ['./date-picker.component.scss'],
   templateUrl: './date-picker.component.html',
 })
-
-export class DsDatePickerComponent extends DynamicFormControlComponent implements OnInit {
+export class DsDatePickerComponent
+  extends DynamicFormControlComponent
+  implements OnInit
+{
   @Input() bindId = true;
   @Input() group: UntypedFormGroup;
   @Input() model: DynamicDsDatePickerModel;
@@ -43,15 +45,16 @@ export class DsDatePickerComponent extends DynamicFormControlComponent implement
   minDay = 1;
   maxDay = 31;
 
-  yearPlaceholder = 'year';
-  monthPlaceholder = 'month';
-  dayPlaceholder = 'day';
+  yearPlaceholder = 'año';
+  monthPlaceholder = 'mes';
+  dayPlaceholder = 'día';
 
   disabledMonth = true;
   disabledDay = true;
 
-  constructor(protected layoutService: DynamicFormLayoutService,
-              protected validationService: DynamicFormValidationService
+  constructor(
+    protected layoutService: DynamicFormLayoutService,
+    protected validationService: DynamicFormValidationService
   ) {
     super(layoutService, validationService);
   }
@@ -63,7 +66,9 @@ export class DsDatePickerComponent extends DynamicFormControlComponent implement
     this.initialDay = now.getUTCDate();
 
     if (this.model && this.model.value !== null) {
-      const values = this.model.value.toString().split(DS_DATE_PICKER_SEPARATOR);
+      const values = this.model.value
+        .toString()
+        .split(DS_DATE_PICKER_SEPARATOR);
       if (values.length > 0) {
         this.initialYear = parseInt(values[0], 10);
         this.year = this.initialYear;
@@ -81,7 +86,6 @@ export class DsDatePickerComponent extends DynamicFormControlComponent implement
     }
 
     this.maxYear = this.initialYear + 100;
-
   }
 
   onBlur(event) {
@@ -150,15 +154,17 @@ export class DsDatePickerComponent extends DynamicFormControlComponent implement
       value = yyyy;
     }
     if (hasValue(this.month)) {
-      const mm = this.month.toString().length === 1
-        ? '0' + this.month.toString()
-        : this.month.toString();
+      const mm =
+        this.month.toString().length === 1
+          ? '0' + this.month.toString()
+          : this.month.toString();
       value += DS_DATE_PICKER_SEPARATOR + mm;
     }
     if (hasValue(this.day)) {
-      const dd = this.day.toString().length === 1
-        ? '0' + this.day.toString()
-        : this.day.toString();
+      const dd =
+        this.day.toString().length === 1
+          ? '0' + this.day.toString()
+          : this.day.toString();
       value += DS_DATE_PICKER_SEPARATOR + dd;
     }
 
@@ -175,5 +181,4 @@ export class DsDatePickerComponent extends DynamicFormControlComponent implement
     date.setMonth(date.getMonth() + 1, 0);
     return date.getDate();
   }
-
 }
