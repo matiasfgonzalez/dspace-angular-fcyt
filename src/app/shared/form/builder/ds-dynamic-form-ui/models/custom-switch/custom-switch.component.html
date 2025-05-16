@@ -25,7 +25,7 @@
     [for]="bindId && model.id"
   >
     <span
-      [innerHTML]="model.label"
+      [innerHTML]="model.label | translate"
       [ngClass]="[getClass('element', 'label'), getClass('grid', 'label')]"
     ></span>
   </label>
