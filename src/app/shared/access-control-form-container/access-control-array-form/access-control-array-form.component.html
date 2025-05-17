@@ -1,44 +1,50 @@
 <form #ngForm="ngForm">
   <div *ngIf="showWarning" class="alert alert-warning">
-    {{'access-control-no-access-conditions-warning-message' | translate}}
+    {{ "access-control-no-access-conditions-warning-message" | translate }}
   </div>
 
   <ng-container *ngFor="let control of form.accessControls; trackBy: trackById">
-    <div ngModelGroup="access-control-item-{{control.id}}" class="access-control-item mt-3">
-
+    <div
+      ngModelGroup="access-control-item-{{ control.id }}"
+      class="access-control-item mt-3"
+    >
       <div class="d-flex flex-column">
         <div>
-          <label for="accesscontroloption-{{control.id}}">
-            {{'access-control-option-label' | translate}}
+          <label for="accesscontroloption-{{ control.id }}">
+            {{ "access-control-option-label" | translate }}
           </label>
           <select
-            id="accesscontroloption-{{control.id}}"
+            id="accesscontroloption-{{ control.id }}"
             [disabled]="ngForm.disabled"
             [(ngModel)]="control.itemName"
             (ngModelChange)="accessControlChanged(control, $event)"
-            name="itemName-{{control.id}}"
-            class="form-control">
+            name="itemName-{{ control.id }}"
+            class="form-control"
+          >
             <option value=""></option>
-            <option *ngFor="let option of dropdownOptions" [value]="option.name">
-              {{ option.name }}
+            <option
+              *ngFor="let option of dropdownOptions"
+              [value]="option.name"
+            >
+              {{ option.name | translate }}
             </option>
           </select>
           <small class="form-text text-muted">
-            {{'access-control-option-note' | translate}}
+            {{ "access-control-option-note" | translate }}
           </small>
         </div>
 
         <div *ngIf="control.hasStartDate" class="mt-3">
-          <label for="accesscontrolstartdate-{{control.id}}">
-            {{'access-control-option-start-date' | translate}}
+          <label for="accesscontrolstartdate-{{ control.id }}">
+            {{ "access-control-option-start-date" | translate }}
           </label>
           <div class="input-group">
             <input
-              id="accesscontrolstartdate-{{control.id}}"
+              id="accesscontrolstartdate-{{ control.id }}"
               class="form-control"
               placeholder="yyyy-mm-dd"
               [(ngModel)]="control.startDate"
-              name="startDate-{{control.id}}"
+              name="startDate-{{ control.id }}"
               [maxDate]="control.maxStartDate | toDate"
               ngbDatepicker
               placement="top-start top-end bottom-start bottom-end"
@@ -48,26 +54,27 @@
               <button
                 class="btn btn-outline-secondary fas fa-calendar"
                 [disabled]="ngForm.disabled"
-                (click)="d.toggle()" type="button">
-              </button>
+                (click)="d.toggle()"
+                type="button"
+              ></button>
             </div>
           </div>
           <small class="form-text text-muted">
-            {{'access-control-option-start-date-note' | translate}}
+            {{ "access-control-option-start-date-note" | translate }}
           </small>
         </div>
 
         <div *ngIf="control.hasEndDate" class="mt-3">
-          <label for="accesscontrolenddate-{{control.id}}">
-            {{'access-control-option-end-date' | translate}}
+          <label for="accesscontrolenddate-{{ control.id }}">
+            {{ "access-control-option-end-date" | translate }}
           </label>
           <div class="input-group">
             <input
-              id="accesscontrolenddate-{{control.id}}"
+              id="accesscontrolenddate-{{ control.id }}"
               class="form-control"
               placeholder="yyyy-mm-dd"
               [(ngModel)]="control.endDate"
-              name="endDate-{{control.id}}"
+              name="endDate-{{ control.id }}"
               [maxDate]="control.maxEndDate | toDate"
               ngbDatepicker
               placement="top-start top-end bottom-start bottom-end"
@@ -75,14 +82,15 @@
             />
             <div class="input-group-append">
               <button
-                type="button" class="btn btn-outline-secondary fas fa-calendar"
+                type="button"
+                class="btn btn-outline-secondary fas fa-calendar"
                 [disabled]="ngForm.disabled"
-                (click)="d1.toggle()">
-              </button>
+                (click)="d1.toggle()"
+              ></button>
             </div>
           </div>
           <small class="form-text text-muted">
-            {{'access-control-option-end-date-note' | translate}}
+            {{ "access-control-option-end-date-note" | translate }}
           </small>
         </div>
       </div>
@@ -90,10 +98,12 @@
       <div>
         <label>&nbsp;</label>
         <div class="input-group">
-
-          <button type="button" class="btn btn-outline-danger"
-                  [disabled]="ngForm.disabled || form.accessControls.length === 1"
-                  (click)="removeAccessControlItem(control.id)">
+          <button
+            type="button"
+            class="btn btn-outline-danger"
+            [disabled]="ngForm.disabled || form.accessControls.length === 1"
+            (click)="removeAccessControlItem(control.id)"
+          >
             <i class="fas fa-trash"></i>
           </button>
         </div>
@@ -101,11 +111,14 @@
     </div>
   </ng-container>
 
-  <button type="button" id="add-btn-{{type}}" class="btn btn-outline-primary mt-3"
-          [disabled]="ngForm.disabled"
-          (click)="addAccessControlItem()">
+  <button
+    type="button"
+    id="add-btn-{{ type }}"
+    class="btn btn-outline-primary mt-3"
+    [disabled]="ngForm.disabled"
+    (click)="addAccessControlItem()"
+  >
     <i class="fas fa-plus"></i>
-    {{'access-control-add-more' | translate}}
+    {{ "access-control-add-more" | translate }}
   </button>
-
 </form>
