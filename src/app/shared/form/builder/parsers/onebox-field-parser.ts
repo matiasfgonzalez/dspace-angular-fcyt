@@ -12,7 +12,7 @@ import {
   QUALDROP_VALUE_SUFFIX,
 } from '../ds-dynamic-form-ui/models/ds-dynamic-qualdrop.model';
 import { FormFieldMetadataValueObject } from '../models/form-field-metadata-value.model';
-import { isNotEmpty } from '../../../empty.util';
+import { isNotEmpty, isNotUndefined } from '../../../empty.util';
 import {
   DsDynamicInputModel,
   DsDynamicInputModelConfig,
@@ -121,5 +121,42 @@ export class OneboxFieldParser extends FieldParser {
 
       return new DsDynamicInputModel(inputModelConfig);
     }
+  }
+
+  protected setOptions(selectModelConfig): void {
+    // Checks if field has multiple values and sets options available
+    if (
+      isNotUndefined(this.configData.selectableMetadata) &&
+      this.configData.selectableMetadata.length > 1
+    ) {
+      selectModelConfig.options = [];
+      this.configData.selectableMetadata.forEach((option, key) => {
+        const translationKey = this.generateTranslationKey(option.label);
+
+        if (key === 0) {
+          selectModelConfig.value = option.metadata;
+        }
+        selectModelConfig.options.push({
+          label: translationKey,
+          value: option.metadata,
+        });
+      });
+    }
+  }
+
+  private generateTranslationKey(label: string): string {
+    const translations: Record<string, string> = {
+      Identifiers: 'Identificadores',
+      'If the item has any identification numbers or codes associated with\n                        it, please enter the types and the actual numbers or codes.':
+        'Si el ítem tiene números o códigos de identificación asociados, por favor ingrese los tipos y los números o códigos reales.',
+      ISSN: 'ISSN',
+      Other: 'Otro',
+      ISMN: 'ISMN',
+      "Gov't Doc #": 'N.º de documento gubernamental',
+      URI: 'URI',
+      ISBN: 'ISBN',
+    };
+
+    return translations[label] ?? label;
   }
 }
