@@ -9,7 +9,10 @@
 //  Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
 //  "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
-$font-family-sans-serif: Georgia, serif;
+// $font-family-sans-serif: Georgia, serif;
+$font-family-sans-serif: "Georgia", serif, -apple-system, BlinkMacSystemFont,
+  "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji",
+  "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
 // Tipografía principal
 $font-family-base: $font-family-sans-serif;
